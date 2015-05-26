@@ -5,7 +5,7 @@ from numpy import array
 import pdb
 
 def test_remove_sample_from_prob():
-    pdb.set_trace()
+    #pdb.set_trace()
     prob = abs(randn(2))
     prob /= prob.sum()
     assert_equal(s_info.remove_sample_from_prob(prob,1)[0], 1)
@@ -21,3 +21,4 @@ def test_remove_sample_from_prob():
 
     prob = s_info.remove_sample_from_prob(prob, 2)
     assert_equal(prob[3], 1.0/2)
+

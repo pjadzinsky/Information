@@ -2,6 +2,7 @@ from nose.tools import assert_equal, assert_true, assert_raises, assert_almost_e
 import Information.information as info
 from numpy import array, mod
 from numpy.random import randint
+from numpy.testing import assert_array_almost_equal
 import pdb
 #import Information.Shannon_info
 
@@ -49,17 +50,18 @@ def test_labels_to_prob():
     assert_true((prob0==prob1).all())
 
 def test_mi():
+    # a trivial example
     x = [1,1,1,1,2,2,2,2]
     y = [1,2,1,2,1,2,1,2]
     assert_equal(info.mi(x,y), 0)
 
+    # a simpe example with 0 entorpy
     x = randint(0, 8, 100000)
     y = randint(0, 8, 100000)
     assert_almost_equal(info.mi(x,y), 0, places=3)
 
-    pdb.set_trace()
+    # another example
     y = mod(x,4)
-
     assert_almost_equal(info.mi(x,y), 2, places=2)
 
 def test_combine_labels():
@@ -91,3 +93,15 @@ def test_combine_labels():
     y = (1,2,3)
     assert_raises(ValueError, info.combine_labels, x, y)
 
+def test_Distribution():
+    prob = array([.5, .25, .25])
+    myDist0 = info.Distribution(array(prob))
+    x = myDist0.sample(1000000)
+    hist = [(x==i).mean() for i in range(len(prob))]
+    assert_array_almost_equal(prob, hist, decimal=3)
+
+    prob = array([.6, .2, .1, .05, .025, .025] )
+    myDist0 = info.Distribution(array(prob))
+    x = myDist0.sample(1000000)
+    hist = [(x==i).mean() for i in range(len(prob))]
+    assert_array_almost_equal(prob, hist, decimal=3)
