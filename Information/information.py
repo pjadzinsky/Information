@@ -1,7 +1,8 @@
 '''
 information.py
 '''
-
+__all__ = ['get_entropy', 'labels_to_prob', 'combine_labels', 'mi', 'cond_mi', 'mi_chain_rule', 'binned', 
+    'gaussianEntropy', 'gaussianJointEntropy', 'gaussianInformation', 'subCov', 'Distribution']
 import numpy as np
 import pdb as pdb
 
@@ -300,8 +301,18 @@ class Distribution:
 
     def sample(self, *args):
         '''
-        generate a random number in [0,1) and return the index in self.prob
+        generate a random number in [0,1) and return the index into self.prob
         such that self.prob[index] <= random_number but self.prob[index+1] > random_number
+
+        implementation note: the problem is identical to finding the index into self.cumsum
+        where the random number should be inserted to keep the array sorted. This is exactly
+        what searchsorted does. 
+
+        usage:
+            myDist = Distribution(array(0.5, .25, .25))
+            x = myDist.sample()         # generates 1 sample
+            x = myDist.sample(100)      # generates 100 samples
+            x = myDist.sample(10,10)    # generates a 10x10 ndarray
         '''
         return self.cumsum.searchsorted(np.random.rand(*args))
         

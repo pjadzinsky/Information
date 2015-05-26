@@ -4,6 +4,9 @@ Implement a new idea, from x, y (iterables with discrete symbols)
 loop through all the symbols in x and for each symbol, replace all its instances by other values
 in x (drawn from the the same probability distribution) and recompute the MI.
 """
+__all__ = ['toy_example', 'remove_sample_from_prob', 'inhibit_symbol', 'change_response', 
+    'differentiate_mi']
+
 import Information.information as info
 from Information.information import Distribution
 import numpy as np
